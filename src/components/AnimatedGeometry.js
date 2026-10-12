@@ -1,204 +1,183 @@
 
 "use client";
 
-/*
- * AnimatedGeometry.js
- * Lightweight SVG artwork for the portfolio hero.
- *
- * Motion rotates the orbital paths and gently pulses the centre.
- * The reduced-motion preference disables continuous movement.
- */
-
 import { motion, useReducedMotion } from "motion/react";
+
+const technologies = [
+  { label: "Python", short: "PY" },
+  { label: "FastAPI", short: "API" },
+  { label: "Next.js", short: "JS" },
+  { label: "AI / ML", short: "AI" },
+  { label: "PostgreSQL", short: "DB" },
+  { label: "Docker", short: "DX" },
+];
+
+const particles = [0, 90, 180, 270];
 
 export default function AnimatedGeometry() {
   const reduceMotion = useReducedMotion();
 
-  const orbitTransition = (duration, delay = 0) => ({
-    duration: reduceMotion ? 0 : duration,
-    delay,
-    repeat: reduceMotion ? 0 : Infinity,
-    ease: "linear",
-  });
-
   return (
     <div
       className="relative mx-auto aspect-square w-full max-w-[470px]"
-      aria-hidden="true"
+      role="img"
+      aria-label="Technology orbit featuring Python, FastAPI, Next.js, AI and machine learning, PostgreSQL, and Docker"
     >
-      {/* Ambient glow behind the graphic */}
-      <div className="pointer-events-none absolute inset-[20%] rounded-full bg-accent/10 blur-[70px]" />
+      {/* Background glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-[20%] rounded-full bg-accent/10 blur-[65px]"
+      />
 
-      <svg
-        viewBox="0 0 400 400"
-        className="relative h-full w-full overflow-visible"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+      {/* Technical grid */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-[5%] rounded-full opacity-50"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, rgb(146 147 139 / 12%) 1px, transparent 1px), linear-gradient(to bottom, rgb(146 147 139 / 12%) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+          maskImage:
+            "radial-gradient(circle, black 25%, transparent 72%)",
+          WebkitMaskImage:
+            "radial-gradient(circle, black 25%, transparent 72%)",
+        }}
+      />
+
+      {/* Static orbit rings */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-[7%] rounded-full border border-accent/25"
+      />
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-[22%] rounded-full border border-foreground/15"
+      />
+
+      {/* Orbiting technology badges */}
+      <div
+        className={`absolute inset-0 ${
+          reduceMotion ? "" : "animate-orbit"
+        }`}
+        aria-hidden="true"
       >
-        <defs>
-          <pattern
-            id="geometry-grid"
-            width="24"
-            height="24"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M 24 0 L 0 0 0 24"
-              stroke="#92938B"
-              strokeOpacity="0.16"
-              strokeWidth="0.6"
+        {technologies.map((technology, index) => {
+          const angle = (360 / technologies.length) * index;
+          const radians = (angle * Math.PI) / 180;
+          const radius = 42;
+
+          // Fixed, rounded coordinates prevent hydration mismatches.
+          const left = `${(
+            50 + radius * Math.sin(radians)
+          ).toFixed(4)}%`;
+
+          const top = `${(
+            50 - radius * Math.cos(radians)
+          ).toFixed(4)}%`;
+
+          return (
+            <div
+              key={technology.label}
+              className="group absolute"
+              style={{
+                left,
+                top,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {/* Counter-rotate each badge to keep it upright */}
+              <div
+                className={`flex flex-col items-center ${
+                  reduceMotion ? "" : "animate-counter-orbit"
+                }`}
+              >
+                <div className="relative flex h-[58px] w-[58px] items-center justify-center rounded-full border border-accent/40 bg-[#191a17] shadow-[0_0_25px_rgba(255,77,46,0.12)] transition-all duration-300 group-hover:scale-110 group-hover:border-accent group-hover:bg-accent group-hover:shadow-[0_0_32px_rgba(255,77,46,0.3)] sm:h-[66px] sm:w-[66px]">
+                  <span className="font-mono text-sm font-semibold tracking-tight text-accent transition-colors duration-300 group-hover:text-background sm:text-base">
+                    {technology.short}
+                  </span>
+
+                  <span className="absolute -right-0.5 top-1 h-2 w-2 rounded-full border border-background bg-accent" />
+                </div>
+
+                {/* Labels appear on hover */}
+                <span className="pointer-events-none absolute top-full mt-2 whitespace-nowrap rounded-md border border-border bg-background/95 px-3 py-1.5 font-mono text-[10px] uppercase tracking-wider text-foreground opacity-0 shadow-lg transition-all duration-200 group-hover:translate-y-1 group-hover:opacity-100">
+                  {technology.label}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Central hub */}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.85 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className="absolute left-1/2 top-1/2 z-10 flex h-[112px] w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-accent/50 bg-background shadow-[0_0_55px_rgba(255,77,46,0.13)] sm:h-[132px] sm:w-[132px]"
+      >
+        {/* Short, sharp signal burst */}
+        {!reduceMotion && (
+          <>
+            <span
+              aria-hidden="true"
+              className="center-pulse"
             />
-          </pattern>
+            <span
+              aria-hidden="true"
+              className="center-pulse center-pulse-delay"
+            />
 
-          <radialGradient id="core-glow">
-            <stop offset="0%" stopColor="#FF4D2E" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#FF4D2E" stopOpacity="0" />
-          </radialGradient>
-        </defs>
+            {particles.map((angle) => (
+              <span
+                key={angle}
+                aria-hidden="true"
+                className="center-particle"
+                style={{
+                  "--particle-angle": `${angle}deg`,
+                }}
+              />
+            ))}
+          </>
+        )}
 
-        {/* Technical grid */}
-        <rect
-          x="12"
-          y="12"
-          width="376"
-          height="376"
-          fill="url(#geometry-grid)"
-          rx="4"
+        <div
+          aria-hidden="true"
+          className="absolute inset-2 rounded-full border border-foreground/10"
         />
 
-        {/* Coordinate axes */}
-        <path
-          d="M200 22V378 M22 200H378"
-          stroke="#92938B"
-          strokeOpacity="0.24"
-          strokeWidth="0.8"
-          strokeDasharray="3 7"
-        />
+        <div className="relative z-10 flex flex-col items-center gap-1">
+          <span className="font-mono text-2xl font-semibold tracking-tighter text-accent sm:text-3xl">
+            {"</>"}
+          </span>
 
-        {/* Centre glow */}
-        <circle cx="200" cy="200" r="100" fill="url(#core-glow)" />
+          <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-muted sm:text-[9px]">
+            Build / Learn
+          </span>
+        </div>
+      </motion.div>
 
-        {/* Fixed orbital paths */}
-        <circle
-          cx="200"
-          cy="200"
-          r="118"
-          stroke="#92938B"
-          strokeOpacity="0.4"
-          strokeWidth="0.8"
-        />
+      {/* Technical annotations */}
+      <span
+        aria-hidden="true"
+        className="absolute left-[8%] top-[15%] font-mono text-[8px] tracking-widest text-muted/80 sm:text-[9px]"
+      >
+        SYS.001
+      </span>
 
-        <circle
-          cx="200"
-          cy="200"
-          r="150"
-          stroke="#92938B"
-          strokeOpacity="0.22"
-          strokeWidth="0.8"
-          strokeDasharray="2 7"
-        />
+      <span
+        aria-hidden="true"
+        className="absolute bottom-[14%] right-[6%] font-mono text-[8px] tracking-widest text-muted/80 sm:text-[9px]"
+      >
+        NODE_ACTIVE
+      </span>
 
-        {/* Orbit one */}
-        <motion.g
-          style={{ transformOrigin: "200px 200px" }}
-          animate={{ rotate: reduceMotion ? 0 : 360 }}
-          transition={orbitTransition(36)}
-        >
-          <ellipse
-            cx="200"
-            cy="200"
-            rx="118"
-            ry="48"
-            stroke="#FF4D2E"
-            strokeWidth="1.2"
-            transform="rotate(-35 200 200)"
-          />
-
-          <circle cx="318" cy="200" r="4" fill="#FF4D2E" />
-
-          <circle
-            cx="82"
-            cy="200"
-            r="2.5"
-            fill="#F3F0E8"
-          />
-        </motion.g>
-
-        {/* Orbit two moves in the opposite direction */}
-        <motion.g
-          style={{ transformOrigin: "200px 200px" }}
-          animate={{ rotate: reduceMotion ? 0 : -360 }}
-          transition={orbitTransition(48)}
-        >
-          <ellipse
-            cx="200"
-            cy="200"
-            rx="78"
-            ry="143"
-            stroke="#F3F0E8"
-            strokeOpacity="0.65"
-            strokeWidth="0.9"
-            transform="rotate(45 200 200)"
-          />
-
-          <circle cx="200" cy="57" r="3" fill="#FF4D2E" />
-        </motion.g>
-
-        {/* Central technical core */}
-        <motion.g
-          style={{ transformOrigin: "200px 200px" }}
-          animate={
-            reduceMotion
-              ? { scale: 1 }
-              : { scale: [1, 1.045, 1] }
-          }
-          transition={{
-            duration: 4,
-            repeat: reduceMotion ? 0 : Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <circle
-            cx="200"
-            cy="200"
-            r="37"
-            stroke="#FF4D2E"
-            strokeOpacity="0.7"
-            strokeWidth="1"
-          />
-
-          <circle cx="200" cy="200" r="24" fill="#191A17" />
-
-          <circle cx="200" cy="200" r="5" fill="#FF4D2E" />
-
-          <path
-            d="M200 190V210 M190 200H210"
-            stroke="#F3F0E8"
-            strokeWidth="0.8"
-          />
-        </motion.g>
-
-        {/* Corner registration marks */}
-        <g stroke="#FF4D2E" strokeWidth="1">
-          <path d="M12 28V12H28" />
-          <path d="M372 12H388V28" />
-          <path d="M12 372V388H28" />
-          <path d="M372 388H388V372" />
-        </g>
-
-        {/* Small coordinate labels */}
-        <g
-          fill="#92938B"
-          fontSize="8"
-          fontFamily="monospace"
-          letterSpacing="1"
-        >
-          <text x="20" y="44">SYS.001</text>
-          <text x="324" y="44">X / 400</text>
-          <text x="20" y="374">NODE_ACTIVE</text>
-          <text x="324" y="374">Y / 400</text>
-        </g>
-      </svg>
+      <span
+        aria-hidden="true"
+        className="absolute left-1/2 top-[3%] h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-accent"
+      />
     </div>
   );
 }
