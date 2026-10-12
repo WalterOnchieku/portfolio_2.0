@@ -1,14 +1,10 @@
 
 "use client";
 
-/*
- * Hero.js
- * The first and most important section of the portfolio.
- */
-
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import AnimatedGeometry from "./AnimatedGeometry";
+import CursorSpotlight from "./CursorSpotlight";
 
 const technologies = ["Python", "FastAPI", "Next.js", "AI / ML"];
 
@@ -31,6 +27,7 @@ export default function Hero() {
       id="home"
       className="site-grid relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 sm:pt-32 lg:pt-24"
     >
+      <CursorSpotlight />
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-8 px-5 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10 lg:px-12">
         {/* Introductory copy */}
         <div className="relative z-10">

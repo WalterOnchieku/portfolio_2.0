@@ -1,6 +1,4 @@
 
-/* Global stylesheet: portfolio design tokens, typography and base styles. */
-
 @import "tailwindcss";
 
 :root {
@@ -10,13 +8,8 @@
   --accent: #ff4d2e;
   --muted: #92938b;
   --border: #383933;
-
-  --font-display: var(--font-space-grotesk);
-  --font-body: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
 }
 
-/* Make Tailwind utilities available for our custom colour tokens. */
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -25,12 +18,11 @@
   --color-muted: var(--muted);
   --color-border: var(--border);
 
-  --font-sans: var(--font-body);
-  --font-display: var(--font-display);
-  --font-mono: var(--font-mono);
+  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
-/* Consistent box sizing and page behaviour. */
 * {
   box-sizing: border-box;
 }
@@ -44,7 +36,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), sans-serif;
+  font-family: var(--font-inter), sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -68,20 +60,131 @@ button {
   font: inherit;
 }
 
-/* Use the accent sparingly. */
 .accent-text {
   color: var(--accent);
 }
 
-/* Reusable technical label. */
 .eyebrow {
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-jetbrains-mono), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-/* Honour accessibility settings that request less motion. */
+.site-grid {
+  position: relative;
+  isolation: isolate;
+}
+
+.site-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(to right, rgb(146 147 139 / 9%) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(146 147 139 / 9%) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 10%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 78%);
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-orbit {
+  animation: orbit-spin 50s linear infinite;
+  transform-origin: center center;
+}
+
+.animate-counter-orbit {
+  animation: orbit-spin 50s linear infinite reverse;
+  transform-origin: center center;
+}
+
+.center-pulse {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: center-burst 1.4s cubic-bezier(0.12, 0.65, 0.35, 1) infinite;
+}
+
+.center-pulse-delay {
+  animation-delay: 0.7s;
+}
+
+@keyframes center-burst {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.9;
+  }
+
+  55% {
+    opacity: 0.45;
+  }
+
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+.center-particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  pointer-events: none;
+  animation: particle-burst 1.4s ease-out infinite;
+}
+
+@keyframes particle-burst {
+  0% {
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(0);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(var(--particle-angle)) translateX(42px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-grid::before {
+    background-size: 42px 42px;
+    opacity: 0.16;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -94,5 +197,42 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .animate-orbit,
+  .animate-counter-orbit,
+  .center-pulse,
+  .center-pulse-delay,
+  .center-particle {
+    animation: none !important;
+    display: none;
+  }
+}
+
+
+/* Cursor spotlight */
+.cursor-spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    320px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px),
+    rgb(255 77 46 / 10%),
+    rgb(255 77 46 / 4%) 35%,
+    transparent 70%
+  );
+  transition: opacity 250ms ease;
+  mix-blend-mode: screen;
+}
+
+.cursor-spotlight.is-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-spotlight {
+    display: none;
   }
 }
