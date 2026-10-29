@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import AnimatedGeometry from "./AnimatedGeometry";
 import CursorSpotlight from "./CursorSpotlight";
+import CharacterReel from "./CharacterReel";
 
 const technologies = ["Python", "FastAPI", "Next.js", "AI / ML"];
 
@@ -39,7 +40,7 @@ export default function Hero() {
             className="eyebrow mb-6 flex items-center gap-3 text-accent"
           >
             <span className="h-px w-8 bg-accent" />
-            Software developer / AI engineering
+            <CharacterReel text="Software developer / AI engineering" />
           </motion.p>
 
           <motion.h1

@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import { ArrowUpRight, Code2 } from "lucide-react";
 import projects from "@/data/projects";
+import CharacterReel from "./CharacterReel";
 
 export default function Projects() {
   return (
@@ -14,7 +15,7 @@ export default function Projects() {
         <div className="mb-12 flex flex-col justify-between gap-5 sm:mb-16 md:flex-row md:items-end">
           <div>
             <p className="eyebrow mb-4 text-accent">
-              Selected work / 001—003
+              <CharacterReel text="Selected work / 001—003" />
             </p>
 
             <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
@@ -104,17 +105,33 @@ export default function Projects() {
                 ))}
               </div>
 
-              {project.repoUrl ? (
-                <a
-                  href={project.repoUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-8 inline-flex w-fit items-center gap-2 text-sm font-medium text-accent transition-colors hover:text-foreground"
-                >
-                  View source code
-                  <ArrowUpRight size={16} />
-                </a>
-              ) : null}
+              
+<div className="mt-8 flex flex-wrap items-center gap-3">
+  {project.demoUrl ? (
+    <a
+      href={project.demoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex min-h-10 items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition-transform duration-200 hover:-translate-y-0.5"
+    >
+      Live demo
+      <ArrowUpRight size={16} />
+    </a>
+  ) : null}
+
+  {project.repoUrl ? (
+    <a
+      href={project.repoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-accent hover:text-accent"
+    >
+      GitHub
+      <ArrowUpRight size={16} />
+    </a>
+  ) : null}
+</div>
+
 
               <div className="pointer-events-none absolute -bottom-20 -right-20 h-48 w-48 rounded-full bg-accent/5 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
             </motion.article>

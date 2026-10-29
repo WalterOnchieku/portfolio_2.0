@@ -8,6 +8,7 @@ import {
   BrainCircuit,
   Wrench,
 } from "lucide-react";
+import CharacterReel from "./CharacterReel";
 
 const skillGroups = [
   {
@@ -110,7 +111,7 @@ export default function Skills() {
           className="mb-12 max-w-3xl sm:mb-16"
         >
           <p className="eyebrow mb-4 text-accent">
-            Technical toolkit / 001—005
+            <CharacterReel text="Technical toolkit / 001—005" />
           </p>
 
           <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
