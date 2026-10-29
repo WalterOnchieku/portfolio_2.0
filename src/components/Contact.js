@@ -8,6 +8,7 @@ import {
   ContactRound,
   Mail,
 } from "lucide-react";
+import CharacterReel from "./CharacterReel";
 
 const contactLinks = [
   {
@@ -52,7 +53,7 @@ export default function Contact() {
           >
             <p className="eyebrow mb-5 flex items-center gap-3 text-accent">
               <span className="h-px w-8 bg-accent" />
-              Have a project in mind?
+              <CharacterReel text="Have a project in mind?" />
             </p>
 
             <h2 className="max-w-3xl font-display text-5xl font-semibold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-7xl">

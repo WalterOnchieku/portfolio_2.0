@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { ArrowUpRight, BriefcaseBusiness, GraduationCap, Terminal } from "lucide-react";
+import CharacterReel from "./CharacterReel";
 
 const background = [
   {
@@ -37,7 +38,8 @@ export default function About() {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55 }}
         >
-          <p className="eyebrow mb-4 text-accent">A little about me</p>
+          <p className="eyebrow mb-4 text-accent">
+            <CharacterReel text="A little about me" /></p>
 
           <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl">
             Bridging IT,
